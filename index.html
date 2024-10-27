@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Analysis</title>
+    <style>
+        body {
+            background-color: #f0f8ff; /* Light blue background */
+            font-family: Arial, sans-serif;
+            margin: 20px; 
+            padding: 20px; 
+            border-radius: 8px; 
+            max-width: 800px; /* Limit the width */
+            margin: auto; /* Center the body */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+        }
+        h1, h2 {
+            color: #333; 
+            text-align: center; /* Center headers */
+        }
+        form {
+            margin-bottom: 20px; /* Space between forms */
+            padding: 20px; 
+            border: 1px solid #ccc; /* Border for forms */
+            border-radius: 5px; /* Rounded corners for forms */
+            background-color: white; /* White background for forms */
+        }
+        textarea {
+            width: 100%; 
+            height: 100px; /* Fixed height for textarea */
+            margin-bottom: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            padding: 10px; /* Padding inside textarea */
+        }
+        button {
+            padding: 10px 15px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; /* Full-width buttons */
+            font-size: 16px; /* Bigger font for buttons */
+        }
+        button:hover {
+            background-color: #45a049; 
+        }
+        ul {
+            list-style-type: none; /* Remove bullets */
+            padding: 0; /* Remove padding */
+        }
+        li {
+            margin: 10px 0; /* Space between list items */
+            padding: 10px; 
+            border: 1px solid #ccc; /* Border for list items */
+            border-radius: 5px; 
+            background-color: #f9f9f9; /* Light background for items */
+        }
+        p {
+            color: #555; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Review Analysis Platform</h1>
+
+    <h2>Enter a Review</h2>
+    <form action="/analyze" method="POST">
+        <textarea name="review" placeholder="Type your review here..."></textarea>
+        <button type="submit">Analyze</button>
+    </form>
+
+    <h2>Upload Reviews</h2>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".txt,.csv" style="width: 100%; margin-bottom: 10px;">
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if result %}
+        <h3>Result for Review: "{{ result[0] }}"</h3>
+        <p>Sentiment: {{ result[1] }}</p>
+        <pre>{{ result[2] }}</pre>
+        <p>Potentially Fake: {{ 'Yes' if result[3] else 'No' }}</p>
+    {% endif %}
+
+    {% if results %}
+        <h3>Results for Uploaded Reviews:</h3>
+        <ul>
+            {% for review, sentiment, score, fake in results %}
+                <li>
+                    Review: "{{ review }}" - Sentiment: {{ sentiment }} - Score: {{ score }} - Potentially Fake: {{ 'Yes' if fake else 'No' }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red; text-align: center;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
